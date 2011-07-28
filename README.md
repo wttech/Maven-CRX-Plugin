@@ -1,24 +1,24 @@
-Maven-CRX-Plugin
-----------------
+About Maven-CRX-Plugin
+----------------------
 
 It is a plugin designed for Maven 2.x+ based builds to automate deployment of CRX compliant packages. 
 It allows setting up upload and install commands as a step in a build process speeding up entire development cycle.
 
 ### Installation
 
-  1. Checkout the source code:
+Checkout the source code:
 
     cd [folder of your choice]
     git clone git://github.com/Cognifide/Maven-CRX-Plugin.git
     cd Maven-CRX-Plugin
 
-  2. Compile and install:
+Compile and install:
 
     mvn clean package install
 
 ### Usage
 
-  1. Setting up POM file:
+Set up POM file (check documentation for more configuration options):
 
     (...)
     <plugin>
@@ -33,7 +33,7 @@ It allows setting up upload and install commands as a step in a build process sp
     </plugin>
     (...)
 
-  2. Invoke goal
+Invoke goal:
 
     mvn ... crx:install
 	
