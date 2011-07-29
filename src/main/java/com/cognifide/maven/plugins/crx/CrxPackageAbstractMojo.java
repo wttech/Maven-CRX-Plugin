@@ -1,17 +1,14 @@
 /*
  * Copyright 2011 Cognifide Limited
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
  */
 
 package com.cognifide.maven.plugins.crx;
@@ -152,7 +149,7 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 */
 	protected String post(String targetURL, List<Part> partList) throws MojoExecutionException {
 		PostMethod postMethod = new PostMethod(targetURL);
-		String response = null;
+
 		try {
 			Part[] parts = partList.toArray(new Part[partList.size()]);
 			postMethod.setRequestEntity(new MultipartRequestEntity(parts, postMethod.getParams()));
@@ -160,21 +157,19 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 			int status = getHttpClient().executeMethod(postMethod);
 
 			if (status == HttpStatus.SC_OK) {
-				response = IOUtils.toString(postMethod.getResponseBodyAsStream());
-
+				return IOUtils.toString(postMethod.getResponseBodyAsStream());
 			} else {
-				getLog().error("Remote request failed, cause: " + HttpStatus.getStatusText(status));
 				getLog().warn(postMethod.getResponseBodyAsString());
+				throw new MojoExecutionException("Request to the repository failed, cause: "
+						+ HttpStatus.getStatusText(status) + " (check URL, user and password)");
 			}
 
 		} catch (IOException ex) {
-			throw new MojoExecutionException(
-					"Request to " + targetURL + " failed, cause: " + ex.getMessage(), ex);
+			throw new MojoExecutionException("Request to the repository failed, cause: " + ex.getMessage(),
+					ex);
 		} finally {
 			postMethod.releaseConnection();
 		}
-
-		return response;
 	}
 
 }
