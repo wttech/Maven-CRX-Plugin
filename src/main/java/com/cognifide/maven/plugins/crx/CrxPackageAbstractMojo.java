@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.io.IOUtils;
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
@@ -34,7 +35,7 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 
 	private static final int HTTP_CONNECTION_TIMEOUT = 5000;
 
-	protected static final String UPLOADED_PACKAGE_NAME_PROPERTY = "maven-crx-plugin-uploaded_package_path";
+	protected static final String UPLOADED_PACKAGE_PATH_PROPERTY = "crx_install-uploaded_package_path";
 
 	/**
 	 * The URL of the running CRX instance.
@@ -89,6 +90,14 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @required
 	 */
 	protected boolean skip;
+
+	/**
+	 * The Maven Session Object
+	 * 
+	 * @parameter expression="${session}"
+	 * @required
+	 */
+	protected MavenSession mavenSession;
 
 	/**
 	 * Returns the combination of <code>crx.url</code> and <code>jsonPackageManager.urlSuffix}</code>.

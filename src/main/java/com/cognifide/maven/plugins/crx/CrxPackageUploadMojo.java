@@ -1,17 +1,14 @@
 /*
  * Copyright 2011 Cognifide Limited
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
  */
 
 package com.cognifide.maven.plugins.crx;
@@ -33,7 +30,7 @@ import org.apache.maven.plugin.MojoFailureException;
  * Uploads an CRX package to a running CRX instance.
  * 
  * @goal upload
- * @description an CRX package to a running CRX instance.
+ * @description Uploads an CRX package to a running CRX instance.
  */
 public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 
@@ -42,7 +39,7 @@ public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 			getLog().info("Skipping package uploading as instructed");
 			return;
 		}
-		
+
 		File packageFile = getPackageFile();
 
 		String targetURL = getUploadURL();
@@ -50,9 +47,10 @@ public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 		try {
 			String response = post(targetURL, createUploadParameters(packageFile));
 			CrxResponse parsedJson = CrxResponse.parseCrxJsonResponse(response);
+
 			if (parsedJson.isSuccess()) {
 				getLog().info(parsedJson.getMsg());
-				System.setProperty(UPLOADED_PACKAGE_NAME_PROPERTY, parsedJson.getPath());
+				mavenSession.getUserProperties().put(UPLOADED_PACKAGE_PATH_PROPERTY, parsedJson.getPath());
 			} else {
 				getLog().error(parsedJson.getMsg());
 				throw new MojoExecutionException(parsedJson.getMsg());
@@ -77,5 +75,4 @@ public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 		partList.add(new StringPart("force", Boolean.toString(this.force)));
 		return partList;
 	}
-
 }
