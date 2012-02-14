@@ -51,11 +51,12 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 
 		uploadedPackagePath = StringUtils.defaultString(mavenSession.getUserProperties().get(
 				UPLOADED_PACKAGE_PATH_PROPERTY));
-		if (StringUtils.isBlank(uploadedPackagePath)) {
+		
+		if (StringUtils.isEmpty(uploadedPackagePath)) {
 			uploadedPackagePath = packagePath;
 		}
 
-		if (StringUtils.isBlank(uploadedPackagePath)) {
+		if (StringUtils.isEmpty(uploadedPackagePath)) {
 			getLog().error("Uploading goal hasn't set up path for package!");
 			return;
 		}
