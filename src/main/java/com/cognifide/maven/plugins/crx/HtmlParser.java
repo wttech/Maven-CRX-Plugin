@@ -56,7 +56,7 @@ public class HtmlParser {
 			if (printStacktrace) {
 				if (matcher.groupCount() > 1) {
 					String secondGroup = matcher.group(2);
-					if (StringUtils.isNotBlank(secondGroup)) {
+					if (StringUtils.isNotEmpty(secondGroup)) {
 						this.errors.add(secondGroup);
 					}
 				}
