@@ -29,6 +29,7 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.MojoExecutionException;
 
 public abstract class CrxPackageAbstractMojo extends AbstractMojo {
@@ -90,7 +91,24 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @required
 	 */
 	protected boolean skip;
+	
+	/**
+	 * This will cause the upload to run only at the top of a given module tree. That is, run in the project
+	 * contained in the same folder where the mvn execution was launched.
+	 * 
+	 * @parameter expression="${runOnlyAtExecutionRoot}" default-value="false"
+	 */
+	protected boolean runOnlyAtExecutionRoot;	
 
+	/**
+	 * Base directory of the project.
+	 * 
+	 * @parameter default-value="${basedir}"
+	 * @required
+	 * @readonly
+	 */
+	private File basedir;
+	
 	/**
 	 * The Maven Session Object
 	 * 
@@ -181,4 +199,20 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 		}
 	}
 
+	/**
+	 * Returns true if the current project is located at the Execution Root Directory (where mvn was launched)
+	 */
+	protected boolean isThisTheExecutionRoot() {
+		Log log = this.getLog();
+		log.debug("Root Folder: " + mavenSession.getExecutionRootDirectory());
+		log.debug("Current Folder: " + basedir);
+		boolean result = mavenSession.getExecutionRootDirectory().equalsIgnoreCase(basedir.toString());
+		if (result) {
+			log.debug("This is the execution root.");
+		} else {
+			log.debug("This is NOT the execution root.");
+		}
+
+		return result;
+	}
 }

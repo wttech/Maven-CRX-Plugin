@@ -39,6 +39,11 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 	private String uploadedPackagePath;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
+		if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+			getLog().info("Skipping upload in this project because it's not the Execution Root");
+			return;
+		}
+		
 		if (this.skip) {
 			getLog().info("Skipping package installation as instructed");
 			return;
