@@ -34,12 +34,12 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 
-	public void execute() throws MojoExecutionException, MojoFailureException {		
+	public void execute() throws MojoExecutionException, MojoFailureException {
 		if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
 			getLog().info("Skipping upload in this project because it's not the Execution Root");
 			return;
 		}
-		
+
 		if (this.skip) {
 			getLog().info("Skipping package uploading as instructed");
 			return;

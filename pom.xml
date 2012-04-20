@@ -14,7 +14,8 @@
    limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -24,13 +25,28 @@
 	<packaging>maven-plugin</packaging>
 
 	<name>maven-crx-plugin</name>
+	<description>Allows uploading and installing CRX packages on a running CRX instance</description>
 	<url>http://cognifide.com</url>
 	
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>7</version>
+	</parent>
+
 	<scm>
 		<connection>scm:git:git@github.com:Cognifide/Maven-CRX-Plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:Cognifide/Maven-CRX-Plugin.git</developerConnection>
 		<url>https://github.com/Cognifide/Maven-CRX-Plugin</url>
-	</scm>	
+	</scm>
 
 	<reporting>
 		<plugins>
@@ -109,6 +125,7 @@
 			<version>2.2.1</version>
 		</dependency>
 	</dependencies>
+
 	<developers>
 		<developer>
 			<id>paco</id>
