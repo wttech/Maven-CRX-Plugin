@@ -20,7 +20,7 @@
 
 	<groupId>com.cognifide.maven.plugins</groupId>
 	<artifactId>maven-crx-plugin</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>maven-crx-plugin</name>
