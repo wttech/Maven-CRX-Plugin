@@ -136,7 +136,6 @@
 			<id>mateusz.chrominski</id>
 			<name>Mateusz Chromiński</name>
 			<email>mateusz.chrominski@cognifide.com</email>
-			<url>http://eric.propellors.net</url>
 			<organization>Cognifide</organization>
 			<roles>
 				<role>developer</role>
@@ -155,6 +154,12 @@
 			<id>jakub.przybytek</id>
 			<name>Jakub Przybytek</name>
 			<email>jakub.przybytek@cognifide.com</email>
+			<organization>Cognifide</organization>
+		</developer>
+		<developer>
+			<id>artur.klopotek</id>
+			<name>Artur Kłopotek</name>
+			<email>artur.klopotek@cognifide.com</email>
 			<organization>Cognifide</organization>
 		</developer>
 	</developers>
