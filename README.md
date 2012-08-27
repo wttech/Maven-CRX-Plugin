@@ -3,6 +3,8 @@ About Maven-CRX-Plugin
 
 It is a plugin designed for Maven 2.x+ based builds to automate deployment of CRX compliant packages. 
 It allows setting up upload and install commands as a step in a build process speeding up entire development cycle.
+Additionally, it simplifies package deployment process by providing a goal (crx:activate) for one-step installation 
+of packages on all publish instances.
 
 ### Installation
 
@@ -24,7 +26,7 @@ Set up POM file (check documentation for more configuration options):
     <plugin>
       <groupId>com.cognifide.maven.plugins</groupId>
       <artifactId>maven-crx-plugin</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.3</version>
       <configuration>
         <url>http://crx-machine:5402</url>
         <user>${crx.username}</user>
@@ -36,7 +38,11 @@ Set up POM file (check documentation for more configuration options):
 Invoke goal:
 
     mvn ... crx:install
+
+or (only CQ 5.5):
 	
+    mvn ... crx:activate
+
 More documentation
 ------------------
 * [Maven-CRX-Plugin Wiki](https://github.com/Cognifide/Maven-CRX-Plugin/wiki)
