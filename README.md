@@ -1,10 +1,11 @@
 About Maven-CRX-Plugin
 ----------------------
 
-It is a plugin designed for Maven 2.x+ based builds to automate deployment of CRX compliant packages. 
-It allows setting up upload and install commands as a step in a build process speeding up entire development cycle.
-Additionally, it simplifies package deployment process by providing a goal (crx:activate) for one-step installation 
-of packages on all publish instances.
+This is a plugin designed for Maven 2.x+ based builds to automate CRX compliant packages deployment. 
+It allows to set up upload and install commands as a step in a build process speeding up entire development cycle.
+
+On CQ 5.5, it also simplifies package deployment process by providing a goal (crx:activate) for one-step installation 
+of packages on all publish instances (provided that replication agents are properly configured).
 
 ### Installation
 
