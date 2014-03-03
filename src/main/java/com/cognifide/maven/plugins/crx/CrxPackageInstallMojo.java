@@ -36,6 +36,15 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 	 */
 	private String packagePath;
 
+	/**
+	 *
+	 * Determines how access control nodes should be handled on install
+	 *
+	 * @parameter expression="${acHandling}"
+	 *
+	 */
+	protected String acHandling;
+
 	private String uploadedPackagePath;
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
@@ -92,12 +101,34 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 	}
 
 	protected String getInstallURL(String path) {
-		return getHtmlTargetURL() + path + "/?cmd=install";
+		String installPath = getHtmlTargetURL() + path + "/?cmd=install";
+		return appendAcHandlingParam(installPath);
 	}
 
 	protected void displayErrors(List<String> errors) {
 		for (String error : errors) {
 			getLog().error("CRX: " + error);
 		}
+	}
+
+	protected String appendAcHandlingParam(String path){
+		StringBuilder commandPath = new StringBuilder(path);
+		String acParam = formatAcHandling();
+
+		if(StringUtils.isNotBlank(acParam)){
+			commandPath.append("?");
+			commandPath.append(acParam);
+		}
+
+		return commandPath.toString();
+	}
+
+	protected String formatAcHandling(){
+		AcHandling handle = AcHandling.ofId(acHandling);
+		String command = "";
+		if(handle!=null){
+			command = "acHandling="+handle.getId();
+		}
+		return command;
 	}
 }
