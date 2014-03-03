@@ -116,7 +116,7 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 		String acParam = formatAcHandling();
 
 		if(StringUtils.isNotBlank(acParam)){
-			commandPath.append("?");
+			commandPath.append("&");
 			commandPath.append(acParam);
 		}
 
