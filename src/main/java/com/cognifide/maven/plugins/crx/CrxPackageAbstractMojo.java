@@ -15,22 +15,40 @@ package com.cognifide.maven.plugins.crx;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.ProxySelector;
+import java.net.URL;
+import java.text.MessageFormat;
 
-import org.apache.commons.httpclient.Credentials;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.config.RequestConfig.Builder;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
+import org.apache.http.util.EntityUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.settings.MavenSettingsBuilder;
+import org.apache.maven.settings.Proxy;
+import org.apache.maven.settings.Settings;
 
 public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 
@@ -91,14 +109,14 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @required
 	 */
 	protected boolean skip;
-	
+
 	/**
 	 * This will cause the upload to run only at the top of a given module tree. That is, run in the project
 	 * contained in the same folder where the mvn execution was launched.
 	 * 
 	 * @parameter expression="${runOnlyAtExecutionRoot}" default-value="false"
 	 */
-	protected boolean runOnlyAtExecutionRoot;	
+	protected boolean runOnlyAtExecutionRoot;
 
 	/**
 	 * Base directory of the project.
@@ -108,7 +126,7 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @readonly
 	 */
 	private File basedir;
-	
+
 	/**
 	 * The Maven Session Object
 	 * 
@@ -116,6 +134,15 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @required
 	 */
 	protected MavenSession mavenSession;
+
+	/**
+	 * Builder for the user or global settings.
+	 * 
+	 * @component
+	 * @required
+	 * @readonly
+	 */
+	private MavenSettingsBuilder mavenSettingsBuilder;
 
 	/**
 	 * Returns the combination of <code>crx.url</code> and <code>jsonPackageManager.urlSuffix}</code>.
@@ -134,16 +161,51 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	/**
 	 * Get the http client
 	 */
-	protected HttpClient getHttpClient() {
-		final HttpClient client = new HttpClient();
-		client.getHttpConnectionManager().getParams().setConnectionTimeout(HTTP_CONNECTION_TIMEOUT);
+	protected CloseableHttpClient getHttpClient() {
+		HttpClientBuilder httpClientBuilder = HttpClients.custom();
 
-		// authentication stuff
-		client.getParams().setAuthenticationPreemptive(true);
-		Credentials defaultcreds = new UsernamePasswordCredentials(user, password);
-		client.getState().setCredentials(AuthScope.ANY, defaultcreds);
+		httpClientBuilder.useSystemProperties(); // support proxies, ssl etc
+		httpClientBuilder.setDefaultRequestConfig(getRequestConfig());
 
-		return client;
+		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		Credentials credentials = new UsernamePasswordCredentials(user, password);
+		credentialsProvider.setCredentials(AuthScope.ANY, credentials);
+		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
+
+		return httpClientBuilder.build();
+	}
+
+	private void configureRoutePlanner(HttpClientBuilder httpClientBuilder) throws MojoExecutionException {
+		Settings settings = null;
+		try {
+			settings = mavenSettingsBuilder.buildSettings();
+		} catch (Exception e) {
+			getLog().warn("Cannot build Settings object");
+			throw new MojoExecutionException("Cannot build Settings object: " + e.getMessage(), e);
+		}
+		if (settings != null) {
+			Proxy proxy = settings.getActiveProxy();
+			if (proxy != null) {
+				SystemDefaultRoutePlanner routePlanner = new SystemDefaultRoutePlanner(
+						ProxySelector.getDefault());
+				httpClientBuilder.setRoutePlanner(routePlanner);
+				// httpClient.getHostConfiguration().setProxyHost(new
+				// ProxyHost(proxy.getHost(), proxy.getPort()));
+				// if (StringUtils.isNotBlank(proxy.getUsername()) ||
+				// StringUtils.isNotBlank(proxy.getPassword())) {
+				// httpClient.getState().setProxyCredentials(new
+				// AuthScope(proxy.getHost(), proxy.getPort()),
+				// new UsernamePasswordCredentials(proxy.getUsername(),
+				// proxy.getPassword()));
+				// }
+			}
+		}
+	}
+
+	private RequestConfig getRequestConfig() {
+		Builder requestConfigBuilder = RequestConfig.custom();
+		requestConfigBuilder.setConnectTimeout(HTTP_CONNECTION_TIMEOUT);
+		return requestConfigBuilder.build();
 	}
 
 	/**
@@ -163,40 +225,74 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @throws MojoExecutionException
 	 */
 	protected String post(String targetURL) throws MojoExecutionException {
-		return post(targetURL, new ArrayList<Part>());
+		return post(targetURL, null);
 	}
 
 	/**
 	 * Performs post request to given URL with given parameters provided as a part lists.
 	 * 
-	 * @param targetURL Place where post action should be submitted
+	 * @param targetUrl Place where post action should be submitted
 	 * @param partList Parameters of post action
 	 * @return Response body
 	 * @throws MojoExecutionException
 	 */
-	protected String post(String targetURL, List<Part> partList) throws MojoExecutionException {
-		PostMethod postMethod = new PostMethod(targetURL);
+	protected String post(String targetUrl, HttpEntity postEntity) throws MojoExecutionException {
+
+		URL url;
+		try {
+			url = new URL(targetUrl);
+		} catch (MalformedURLException e) {
+			getLog().warn(e.getMessage());
+			throw new MojoExecutionException("Malformed URL: " + targetUrl, e);
+		}
+		HttpClientContext context = getAuthenticatedContext(url);
+
+		HttpPost post = new HttpPost(targetUrl);
+
+		if (null != postEntity) {
+			post.setEntity(postEntity);
+		}
+
+		CloseableHttpClient httpClient = getHttpClient();
 
 		try {
-			Part[] parts = partList.toArray(new Part[partList.size()]);
-			postMethod.setRequestEntity(new MultipartRequestEntity(parts, postMethod.getParams()));
-
-			int status = getHttpClient().executeMethod(postMethod);
-
-			if (status == HttpStatus.SC_OK) {
-				return IOUtils.toString(postMethod.getResponseBodyAsStream());
+			CloseableHttpResponse response = httpClient.execute(post, context);
+			StatusLine statusLine = response.getStatusLine();
+			int statusCode = statusLine.getStatusCode();
+			String responseBody = EntityUtils.toString(response.getEntity());
+			if (HttpStatus.SC_OK == statusCode) {
+				return responseBody;
 			} else {
-				getLog().warn(postMethod.getResponseBodyAsString());
-				throw new MojoExecutionException("Request to the repository failed, cause: "
-						+ HttpStatus.getStatusText(status) + " (check URL, user and password)");
+				getLog().warn(responseBody);
+				String message = MessageFormat.format("Request to the repository failed, "
+						+ "cause: {0} (check URL, user and password)", statusLine.getReasonPhrase());
+				throw new MojoExecutionException(message);
 			}
-
-		} catch (IOException ex) {
-			throw new MojoExecutionException("Request to the repository failed, cause: " + ex.getMessage(),
-					ex);
+		} catch (IOException e) {
+			throw new MojoExecutionException("Request to the repository failed, cause: " + e.getMessage(), e);
 		} finally {
-			postMethod.releaseConnection();
+			try {
+				httpClient.close();
+			} catch (IOException e) {
+				// silently fail - at least we tried
+			}
 		}
+
+	}
+
+	private HttpClientContext getAuthenticatedContext(URL url) {
+		Credentials credentials = new UsernamePasswordCredentials(user, password);
+		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+		credentialsProvider.setCredentials(AuthScope.ANY, credentials);
+
+		AuthCache authCache = new BasicAuthCache();
+		BasicScheme basicAuth = new BasicScheme();
+		authCache.put(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()), basicAuth);
+
+		HttpClientContext context = HttpClientContext.create();
+		context.setCredentialsProvider(credentialsProvider);
+		context.setAuthCache(authCache);
+		return context;
 	}
 
 	/**

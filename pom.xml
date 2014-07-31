@@ -13,7 +13,6 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -88,10 +87,14 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<scope>compile</scope>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.3.4</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -160,6 +163,12 @@
 			<id>artur.klopotek</id>
 			<name>Artur Kłopotek</name>
 			<email>artur.klopotek@cognifide.com</email>
+			<organization>Cognifide</organization>
+		</developer>
+		<developer>
+			<id>jan.kuzniak</id>
+			<name>Jan Kuźniak</name>
+			<email>jan.kuzniak@cognifide.com</email>
 			<organization>Cognifide</organization>
 		</developer>
 	</developers>

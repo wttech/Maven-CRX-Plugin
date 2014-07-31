@@ -16,13 +16,10 @@ package com.cognifide.maven.plugins.crx;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.MessageFormat;
 
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.FilePartSource;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.StringPart;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -48,9 +45,9 @@ public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 		File packageFile = getPackageFile();
 
 		String targetURL = getUploadURL();
-		getLog().info("Uploading package " + packageFileName + " to " + targetURL);
+		getLog().info(MessageFormat.format("Uploading package {0} to {1}", packageFileName, targetURL));
 		try {
-			String response = post(targetURL, createUploadParameters(packageFile));
+			String response = post(targetURL, createUploadHttpEntity(packageFile));
 			CrxResponse parsedJson = CrxResponse.parseCrxJsonResponse(response);
 
 			if (parsedJson.isSuccess()) {
@@ -71,13 +68,10 @@ public class CrxPackageUploadMojo extends CrxPackageAbstractMojo {
 		return getJsonTargetURL() + "/?cmd=upload";
 	}
 
-	protected List<Part> createUploadParameters(File file) throws IOException {
-		List<Part> partList = new ArrayList<Part>();
-		if (file != null) {
-			partList.add(new FilePart("package", new FilePartSource(file.getName(), file)));
-		}
-
-		partList.add(new StringPart("force", Boolean.toString(this.force)));
-		return partList;
+	protected HttpEntity createUploadHttpEntity(File file) throws IOException {
+		MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+		entityBuilder.addTextBody("force", Boolean.toString(this.force));
+		entityBuilder.addBinaryBody("package", file);
+		return entityBuilder.build();
 	}
 }
