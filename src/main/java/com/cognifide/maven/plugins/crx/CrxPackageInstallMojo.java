@@ -13,11 +13,14 @@
 
 package com.cognifide.maven.plugins.crx;
 
-import java.util.List;
-
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Installs an CRX package to a running CRX instance.
@@ -64,7 +67,7 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 		String targetURL = getInstallURL(uploadedPackagePath);
 
 		getLog().info("Installing package using command: " + targetURL);
-		String response = post(targetURL);
+		String response = post(targetURL,createInstallParameters());
 
 		HtmlParser parser = new HtmlParser(response);
 		parser.parse();
@@ -99,5 +102,12 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 		for (String error : errors) {
 			getLog().error("CRX: " + error);
 		}
+	}
+
+	protected List<Part> createInstallParameters() {
+		List<Part> partList = new ArrayList<Part>();
+
+		partList.add(new StringPart("recursive", Boolean.toString(this.recursive)));
+		return partList;
 	}
 }

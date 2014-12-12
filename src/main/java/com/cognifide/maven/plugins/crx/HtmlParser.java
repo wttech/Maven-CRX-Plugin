@@ -13,17 +13,17 @@
 
 package com.cognifide.maven.plugins.crx;
 
+import org.codehaus.plexus.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.codehaus.plexus.util.StringUtils;
-
 public class HtmlParser {
 
-	private final Pattern errorPattern = Pattern.compile("<span class=\"E\"><b>E</b>&nbsp;(.+)</span>");
+	private final Pattern errorPattern = Pattern.compile("<span class=\"E\"><b>E</b>&nbsp;(.+\\s??.+)</span>");
 
 	private final Pattern processingErrorPattern = Pattern
 			.compile("<span class=\"error\">(.+)</span><br><code><pre>([\\s\\S]+)</pre>");

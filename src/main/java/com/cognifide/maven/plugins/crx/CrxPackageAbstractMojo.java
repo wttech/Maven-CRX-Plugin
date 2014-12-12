@@ -13,11 +13,6 @@
 
 package com.cognifide.maven.plugins.crx;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -29,8 +24,13 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 
@@ -65,6 +65,13 @@ public abstract class CrxPackageAbstractMojo extends AbstractMojo {
 	 * @parameter expression="${crx.force}" default-value="true"
 	 */
 	protected boolean force;
+
+	/**
+	 * The package should be installed recursive
+	 *
+	 * @parameter expression="${crx.recursive}" default-value="true"
+	 */
+	protected boolean recursive;
 
 	/**
 	 * The name of the generated JAR file.
