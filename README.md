@@ -42,13 +42,16 @@ Set up POM file (check documentation for more configuration options):
 ```
 Now you can invoke one of the Maven CRX Plugin goals:
 * to upload artifacts to CRX instance use
-        mvn ... crx:upload
+
+    mvn ... crx:upload
 
 * to upload and install artifacts on CRX instance use
-        mvn ... crx:install
+
+    mvn ... crx:install
 
 * to upload, install and replicate artifacts use (this will works only on CRX 2.3 or later)
-        mvn ... crx:activate
+
+    mvn ... crx:activate
 
 ## Commercial Support
 Technical support can be made available if needed. Please [contact us](mailto:crx-plugin-support@cognifide.com) for more details.
