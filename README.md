@@ -1,3 +1,4 @@
+![Cognifide logo](http://cognifide.com/~/media/wireframe/int/images/cognifide_logo.png)
 # Maven CRX Plugin 
 
 ## Purpose
@@ -6,12 +7,17 @@ It allows to set up upload and install commands as a step in a build process spe
 
 On instances with CRX 2.3 or later, it also simplifies package deployment process by providing a goal (crx:activate) for one-step installation of packages on all publish instances (provided that replication agents are properly configured).
 
+## Features
+* uploads a selected artifact to a running CRX instance
+* installs previously uploaded artifact in a running CRX instance 
+* activates (replicates and installs) previously uploaded artifact on all publish instances (requires CRX 2.3 or later)
+
 ## Prerequisites
 * CQ/AEM instance with CRX 2.1 or later version
 * Maven 2.x, 3.x
 
 ## Installation
-Maven CRX Pligin is available from Maven Central Repo. However if you want to check out the newest development version, do the following:
+Maven CRX Plugin is available from Maven Central Repo. However if you want to check out the newest development version, do the following:
 
 Checkout the source code:
 
@@ -53,6 +59,12 @@ Now you can invoke one of the Maven CRX Plugin goals:
 
         mvn ... crx:activate
 
+## More documentation
+* [Maven-CRX-Plugin Wiki](https://github.com/Cognifide/Maven-CRX-Plugin/wiki)
+* [Cognifide.com](http://cognifide.com)
+* [Maven](http://maven.apache.org)
+* [CRX API](http://dev.day.com/content/docs/en/crx/current/how_to/package_manager.html#Package%20Manager%20HTTP%20Service%20API)
+
 ## Commercial Support
 Technical support can be made available if needed. Please [contact us](mailto:crx-plugin-support@cognifide.com) for more details.
 
@@ -61,9 +73,3 @@ We can:
 * tailor the product to your needs,
 * provide a training for your engineers,
 * support your development teams.
-
-## More documentation
-* [Maven-CRX-Plugin Wiki](https://github.com/Cognifide/Maven-CRX-Plugin/wiki)
-* [Cognifide.com](http://cognifide.com)
-* [Maven](http://maven.apache.org)
-* [CRX API](http://dev.day.com/content/docs/en/crx/current/how_to/package_manager.html#Package%20Manager%20HTTP%20Service%20API)
