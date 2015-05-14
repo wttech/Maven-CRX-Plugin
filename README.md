@@ -1,6 +1,9 @@
 ![Cognifide logo](http://cognifide.com/~/media/wireframe/int/images/cognifide_logo.png)
 # Maven CRX Plugin 
 
+## Change of artifactId
+With plugin version 2.0.0 we have changed artifactId from `maven-crx-plugin` to `crx-maven-plugin` according to [Plugin Naming Convention](https://maven.apache.org/guides/plugin/guide-java-plugin-development.html#Important_Notice:_Plugin_Naming_Convention_and_Apache_Maven_Trademark).
+
 ## Purpose
 This is a plugin designed for Maven 2.x+ based builds to automate CRX compliant packages deployment. 
 It allows to set up upload and install commands as a step in a build process speeding up entire development cycle.
