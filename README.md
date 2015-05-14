@@ -1,4 +1,4 @@
-![Cognifide logo](http://cognifide.com/~/media/wireframe/int/images/cognifide_logo.png)
+![Cognifide logo](http://www.cognifide.com/~/media/cognifide2014/avada-assets/cognifide_logo.png)
 # Maven CRX Plugin 
 
 ## Change of artifactId
