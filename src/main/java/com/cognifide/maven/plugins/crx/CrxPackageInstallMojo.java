@@ -72,7 +72,7 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 		switch (parser.getStatus()) {
 			case SUCCESS:
 				if (parser.getErrors().size() == 0) {
-					getLog().info("Package sucesfully installed.");
+					getLog().info("Package successfully installed.");
 				} else {
 					getLog().warn("Package installed with errors");
 					displayErrors(parser.getErrors());
