@@ -33,30 +33,31 @@ public class CrxPackageManagerStatusMojo extends CrxPackageAbstractMojo {
 
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		checkStatus(getJspTargetURL());
+		try {
+			checkStatus(getJspTargetURL());
+		} catch (InterruptedException e) {
+			getLog().error("Cannot connect to CRX Package Manager service", e);
+			throw new MojoExecutionException("CRX Package Manager service connection failed");
+		}
 	}
 
-	private void checkStatus(String targetURL) throws MojoExecutionException {
-		try {
-			int count = 1;
-			while (count <= retryCount) {
-				getLog().info(String.format("Trying connect to CRX Package Manager service (%s)... [%d/%d]",
-						targetURL, count, retryCount));
-				if (getStatus(targetURL) != HttpStatus.SC_OK) {
-					getLog().warn("Cannot connect to CRX Package Manager service");
+	private void checkStatus(String targetURL) throws InterruptedException, MojoExecutionException {
+		int count = 1;
+		while (count <= retryCount) {
+			getLog().info(String.format("Trying connect to CRX Package Manager service (%s)... [%d/%d]",
+					targetURL, count, retryCount));
+			if (getStatus(targetURL) != HttpStatus.SC_OK) {
+				getLog().warn("Cannot connect to CRX Package Manager service");
 
-					if (count++ == retryCount) {
-						throw new MojoExecutionException("CRX Package Manager service is not accessible.");
-					}
-
-					Thread.sleep(waitingTime);
-					continue;
+				if (count++ == retryCount) {
+					throw new MojoExecutionException("CRX Package Manager service is not accessible.");
 				}
-				getLog().info("CRX Package Manager service is up and running.");
-				break;
+
+				Thread.sleep(waitingTime);
+				continue;
 			}
-		} catch (InterruptedException e) {
-			getLog().error(e);
+			getLog().info("CRX Package Manager service is up and running.");
+			break;
 		}
 	}
 
