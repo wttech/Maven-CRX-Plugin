@@ -1,4 +1,4 @@
-<!--
+﻿<!--
    Copyright 2012 Cognifide Limited
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@
 
 	<groupId>com.cognifide.maven.plugins</groupId>
 	<artifactId>maven-crx-plugin</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>maven-crx-plugin</name>
