@@ -13,11 +13,11 @@
 
 package com.cognifide.maven.plugins.crx;
 
-import java.util.List;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.codehaus.plexus.util.StringUtils;
+
+import java.util.List;
 
 /**
  * Installs an CRX package to a running CRX instance.
@@ -35,6 +35,13 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 	 * @readonly
 	 */
 	private String packagePath;
+
+	/**
+	 * Don't exit if the install was a success but with errors.
+	 *
+	 * @parameter expression="${crx.ignoreSuccessErrors}" default-value="false"
+	 */
+	protected boolean ignoreSuccessErrors;
 
 	private String uploadedPackagePath;
 
@@ -76,13 +83,18 @@ public class CrxPackageInstallMojo extends CrxPackageAbstractMojo {
 				} else {
 					getLog().warn("Package installed with errors");
 					displayErrors(parser.getErrors());
-					throw new MojoExecutionException("Installation completed with errors!");
+					if (!ignoreSuccessErrors){
+						throw new MojoExecutionException("Installation completed with errors!");
+					}
 				}
 				break;
 			case SUCCESS_WITH_ERRORS:
 				getLog().error("Package installed with errors.");
 				displayErrors(parser.getErrors());
-				throw new MojoExecutionException("Installation completed with errors!");
+				if (!ignoreSuccessErrors){
+					throw new MojoExecutionException("Installation completed with errors!");
+				}
+				break;
 			case FAIL:
 				getLog().error("Installation failed.");
 				displayErrors(parser.getErrors());
