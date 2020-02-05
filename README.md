@@ -1,4 +1,4 @@
-![Cognifide logo](http://cognifide.github.io/images/cognifide-logo.png)
+![Cognifide logo](https://assets.cognifide.com/github/cognifide-logo.png)
 # Maven CRX Plugin 
 
 ## Purpose
