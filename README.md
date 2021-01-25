@@ -1,4 +1,4 @@
-![Cognifide logo](https://assets.cognifide.com/github/cognifide-logo.png)
+![Wunderman Thompson Technology logo](./assets/wtt-logo.png)
 # Maven CRX Plugin 
 
 ## Purpose
@@ -22,7 +22,7 @@ Maven CRX Plugin is available from Maven Central Repo. However if you want to ch
 Checkout the source code:
 
     cd [folder of your choice]
-    git clone git://github.com/Cognifide/Maven-CRX-Plugin.git
+    git clone git://github.com/wttech/Maven-CRX-Plugin.git
     cd Maven-CRX-Plugin
 
 Compile and install:
@@ -60,7 +60,7 @@ Now you can invoke one of the Maven CRX Plugin goals:
         mvn ... crx:activate
 
 ## More documentation
-* [Maven-CRX-Plugin Wiki](https://github.com/Cognifide/Maven-CRX-Plugin/wiki)
+* [Maven-CRX-Plugin Wiki](https://github.com/wttech/Maven-CRX-Plugin/wiki)
 * [Cognifide.com](http://cognifide.com)
 * [Maven](http://maven.apache.org)
 * [CRX API](http://dev.day.com/content/docs/en/crx/current/how_to/package_manager.html#Package%20Manager%20HTTP%20Service%20API)

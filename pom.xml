@@ -1,5 +1,5 @@
 ﻿<!--
-   Copyright 2012 Cognifide Limited
+   Copyright 2012 Wunderman Thompson Technology
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -42,9 +42,9 @@
 	</parent>
 
 	<scm>
-		<connection>scm:git:git@github.com:Cognifide/Maven-CRX-Plugin.git</connection>
-		<developerConnection>scm:git:git@github.com:Cognifide/Maven-CRX-Plugin.git</developerConnection>
-		<url>https://github.com/Cognifide/Maven-CRX-Plugin</url>
+		<connection>scm:git:git@github.com:wttech/Maven-CRX-Plugin.git</connection>
+		<developerConnection>scm:git:git@github.com:wttech/Maven-CRX-Plugin.git</developerConnection>
+		<url>https://github.com/wttech/Maven-CRX-Plugin</url>
 	</scm>
 
 	<reporting>
@@ -130,13 +130,13 @@
 			<id>paco</id>
 			<name>Przemyslaw Pakulski</name>
 			<email>przemo.pakulski@cognifide.com</email>
-			<organization>Cognifide</organization>
+			<organization>Wunderman Thompson Technology</organization>
 		</developer>
 		<developer>
 			<id>mateusz.chrominski</id>
 			<name>Mateusz Chromiński</name>
 			<email>mateusz.chrominski@cognifide.com</email>
-			<organization>Cognifide</organization>
+			<organization>Wunderman Thompson Technology</organization>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -145,7 +145,7 @@
 			<id>michal.chudy</id>
 			<name>Michał Chudy</name>
 			<email>michal.chudy@cognifide.com</email>
-			<organization>Cognifide</organization>
+			<organization>Wunderman Thompson Technology</organization>
 			<roles>
 				<role>developer</role>
 			</roles>
@@ -154,13 +154,13 @@
 			<id>jakub.przybytek</id>
 			<name>Jakub Przybytek</name>
 			<email>jakub.przybytek@cognifide.com</email>
-			<organization>Cognifide</organization>
+			<organization>Wunderman Thompson Technology</organization>
 		</developer>
 		<developer>
 			<id>artur.klopotek</id>
 			<name>Artur Kłopotek</name>
 			<email>artur.klopotek@cognifide.com</email>
-			<organization>Cognifide</organization>
+			<organization>Wunderman Thompson Technology</organization>
 		</developer>
 	</developers>
 
